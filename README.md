@@ -18,7 +18,7 @@ interface ProfileView {
 }
 ```
 
-Now, every time now action arrives to our reducers, all methods of implementor of ProfileView will called.
+Now, every time now action arrives to our reducers, all methods of implementor of ProfileView will be called.
 To avoid that, the interface must annotaited with @Memoized annotation, and the ProfileViewMemoized class will be generated.
 
 ```java
@@ -55,7 +55,7 @@ public final class ProfileViewMemoized extends BaseMemoised implements ProfileVi
 }
 ``` 
  
-You can use as a view. You need to pass actual implementor to the constructor of generated class:
+You can use this generated class as a view implementation. You need to pass actual implementor to the constructor of generated class:
 
 ```kotlin
 val actualView : ProfileView = ...
