@@ -1,0 +1,3 @@
+rootProject.name = 'memo'
+include 'memo-compiler', 'memo-annotations', 'sample'
+
