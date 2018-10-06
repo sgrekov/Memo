@@ -1,5 +1,6 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.factorymarket.memo/memo-core.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.factorymarket.memo%22)
 [![License](https://img.shields.io/badge/License-Apache%202.0-yellowgreen.svg)](https://github.com/FactoryMarketRetailGmbH/RxElm/blob/master/LICENSE)
+[![Build Status](https://api.travis-ci.org/FactoryMarketRetailGmbH/Memo.svg?branch=master)](https://travis-ci.org/FactoryMarketRetailGmbH/Memo)
 
 # Memo
 Small annotation processing library for generating memoized variants of interfaces
