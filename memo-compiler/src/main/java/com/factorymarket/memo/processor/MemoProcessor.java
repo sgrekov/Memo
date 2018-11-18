@@ -122,19 +122,7 @@ public class MemoProcessor extends AbstractProcessor {
 
         //if annotated interface has super interface, generate their methods as well
         List<? extends TypeMirror> interfaces = originatingType.getInterfaces();
-        if (interfaces.size() > 0) {
-            for (TypeMirror typeMirror : interfaces) {
-                if (typeMirror.getKind() == TypeKind.DECLARED) {
-                    DeclaredType kind = (DeclaredType) typeMirror;
-                    for (Element methodElement : kind.asElement().getEnclosedElements()) {
-                        if (methodElement.getKind() == ElementKind.METHOD) {
-                            addMemoizedMethod((ExecutableElement) methodElement, memoizedClassBuider, sourceMemoized.debugTag());
-                        }
-                    }
-                }
-
-            }
-        }
+        generateMethodsOfInheretedInterfaces(sourceMemoized, memoizedClassBuider, interfaces);
 
         //create the file
         JavaFile javaFile = JavaFile
@@ -144,7 +132,28 @@ public class MemoProcessor extends AbstractProcessor {
         try {
             javaFile.writeTo(filer);
         } catch (IOException e) {
-            e.printStackTrace();
+            messager.printMessage(Diagnostic.Kind.ERROR, "unable to create class file for " + originatingType.getEnclosingElement().toString());
+        }
+    }
+
+    private void generateMethodsOfInheretedInterfaces(Memoized sourceMemoized, TypeSpec.Builder memoizedClassBuider, List<? extends TypeMirror> interfaces) {
+        if (interfaces.size() > 0) {
+            for (TypeMirror typeMirror : interfaces) {
+                if (typeMirror.getKind() == TypeKind.DECLARED) {
+                    DeclaredType kind = (DeclaredType) typeMirror;
+                    for (Element methodElement : kind.asElement().getEnclosedElements()) {
+                        if (methodElement.getKind() == ElementKind.METHOD) {
+                            addMemoizedMethod((ExecutableElement) methodElement, memoizedClassBuider, sourceMemoized.debugTag());
+                        }
+                    }
+                    try {
+                        TypeElement te = (TypeElement) kind.asElement();
+                        generateMethodsOfInheretedInterfaces(sourceMemoized, memoizedClassBuider, te.getInterfaces());
+                    } catch (ClassCastException cce) {
+                        messager.printMessage(Diagnostic.Kind.WARNING, "unknown type in the class interface");
+                    }
+                }
+            }
         }
     }
 
